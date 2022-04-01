@@ -69,9 +69,23 @@ int main() {
         }
 
 
-        // Contrôle d'une des voitures
+        // ----- Contrôle d'une des voitures -----
+
+        // Accélère la voiture
         if (IsKeyDown(KEY_UP))
             cars[0]._speed += 0.01;
+
+        // Décélère la voiture
+        if (IsKeyDown(KEY_DOWN))
+            cars[0]._speed -= 0.01;
+
+        // Tourne vers la gauche
+        if (IsKeyDown(KEY_LEFT))
+            cars[0]._angle -= 0.01;
+
+        // Tourne vers la droite
+        if (IsKeyDown(KEY_RIGHT))
+            cars[0]._angle += 0.01;
 
 
         // Dessins
