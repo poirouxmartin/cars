@@ -9,7 +9,8 @@
 
 ----- Structure globale du projet -----
 
--> Créer une classe de voitures
+-> Créer une classe circuit
+-> Créer une caméra (classe?) -> une classe scène avec voitures, circuit, caméra ?
 
 
 
@@ -41,6 +42,16 @@ int main() {
 
 
 
+    // Génération des voitures
+    Car cars[n_cars];
+
+    for (int i = 0; i < n_cars; i++) {
+        Car car;
+        cars[i] = car;
+    }
+
+
+
     // Boucle principale (Quitter à l'aide de la croix, ou en faisant échap)
     while (!WindowShouldClose()) {
 
@@ -57,6 +68,13 @@ int main() {
 
             // Couleur de fond
             ClearBackground(background_color);
+
+
+            // Dessin des voitures
+            for (Car c : cars) {
+                c.draw();
+            }
+
             
         // Fin de la zone de dessin
         EndDrawing();
