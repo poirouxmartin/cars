@@ -12,6 +12,8 @@ class Car {
     public:
 
 
+    int index = 0;
+
     // Attributs
 
     // Position
@@ -19,7 +21,7 @@ class Car {
     float _y = 0;
 
     // Vitesse
-    float _speed = 0;
+    float _speed = 0.1;
 
     // Angle de la voiture
     float _angle = 0; 
@@ -41,7 +43,7 @@ class Car {
     void draw();
 
     // Ajoute la vitesse de la voiture à sa position
-
+    void apply_speed();
 
 
 };

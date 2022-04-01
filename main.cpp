@@ -11,6 +11,8 @@
 
 -> Créer une classe circuit
 -> Créer une caméra (classe?) -> une classe scène avec voitures, circuit, caméra ?
+-> Ajout de friction
+-> Définir un delta t
 
 
 
@@ -47,6 +49,7 @@ int main() {
 
     for (int i = 0; i < n_cars; i++) {
         Car car;
+        car.index = i;
         cars[i] = car;
     }
 
@@ -60,7 +63,15 @@ int main() {
             test_function(&test, 1);
         
 
-    
+        // Application de la physique sur les voitures
+        for (Car & c : cars) {
+            c.apply_speed();
+        }
+
+
+        // Contrôle d'une des voitures
+        if (IsKeyDown(KEY_UP))
+            cars[0]._speed += 0.01;
 
 
         // Dessins
@@ -71,7 +82,7 @@ int main() {
 
 
             // Dessin des voitures
-            for (Car c : cars) {
+            for (Car & c : cars) {
                 c.draw();
             }
 
