@@ -12,24 +12,25 @@ class Car {
     public:
 
 
-    int index = 0;
-
     // Attributs
 
-    // Position
+    // Position (m)
     float _x = 0;
     float _y = 0;
 
-    // Vitesse
+    // Vitesse (m/s)
     float _speed = 0.1;
 
-    // Angle de la voiture
+    // Angle de la voiture (radians)
     float _angle = 0; 
 
 
-    // Dimensions
-    float _length = 10;
-    float _width = 5;
+    // Dimensions (m)
+    float _length = 25;
+    float _width = 15;
+
+    // Voiture en cercle plutôt? (radius en m)
+    float _radius = 10;
 
 
     // Constructeurs

@@ -20,3 +20,5 @@ static Color text_color = {255, 100, 100, 255};
 
 // Couleur des voitures
 static Color car_color = {0, 255, 0, 255};
+
+static Color dot_color = {255, 0, 0, 255};

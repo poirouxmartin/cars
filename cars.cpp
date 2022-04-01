@@ -11,8 +11,14 @@ Car::Car() {
 
 // Dessine la voiture
 void Car::draw() {
-    Rectangle r = {_x, _y, _length, _width};
-    DrawRectanglePro(r, {0, 0}, _angle * 180 / PI, car_color);
+    // Rectangle r = {_x, _y, _length, _width};
+    // DrawRectanglePro(r, {0, 0}, _angle * 180 / PI, car_color);
+
+    // Dessine la voiture
+    DrawCircle(_x, _y, _radius, car_color);
+
+    // Dessine un cercle pour indiquer sa direction
+    DrawCircle(_x + _radius * cos(_angle), _y + _radius * sin(_angle), _radius / 4, dot_color);
 }
 
 
