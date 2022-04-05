@@ -34,8 +34,30 @@ void Scene::apply_cars_speed() {
 // Dessin de la scène
 void Scene::draw() {
 
+    // Largeur du champ de la caméra
     float L = _camera._h * tan(_camera._view_angle / 2 * PI / 180);
+
+    // Echelle d'affichage
     float k = screen_width / L;
+
+
+
+    // Dessin du quadrillage
+
+    // Calcul du nombre de lignes et colonnes
+    int _grid_col = L / grid_size + 2;
+    int _grid_lin = L * screen_height / screen_width / grid_size + 2;
+
+    // Dessine chaque colonne
+    for (int i = 0; i < _grid_col; i++) {
+        DrawLine(i * grid_size * k - fmod(_camera._x, grid_size) * k, 0, i * grid_size * k - fmod(_camera._x, grid_size) * k, screen_height, grid_color);
+    }
+
+    // Dessine chaque ligne
+    for (int i = 0; i < _grid_lin; i++) {
+        DrawLine(0, i * grid_size * k - fmod(_camera._y, grid_size) * k, screen_width, i * grid_size * k - fmod(_camera._y, grid_size) * k, grid_color);
+    }
+
 
     // Dessin des voitures
     for (Car & c : _cars) {

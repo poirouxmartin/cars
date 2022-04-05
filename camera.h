@@ -12,7 +12,7 @@ class Cam {
         float _h = 100;
 
 
-        // Angle du champ (°)
+        // Angle du champ en largeur (°) 
         float _view_angle = 100;
 
 

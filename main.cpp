@@ -75,6 +75,22 @@ int main() {
             scene._cars[0]._angle += 0.01;
 
 
+        // Déplacement de la caméra
+        if (IsKeyDown(KEY_KP_6))
+            scene._camera._x += 0.1;
+        if (IsKeyDown(KEY_KP_4))
+            scene._camera._x -= 0.1;
+        if (IsKeyDown(KEY_KP_8))
+            scene._camera._y -= 0.1;
+        if (IsKeyDown(KEY_KP_5))
+            scene._camera._y += 0.1;
+
+        // Zoom/DeZoom
+        if (IsKeyDown(KEY_KP_2))
+            scene._camera._h *= 1.01;
+        if (IsKeyDown(KEY_KP_0))
+            scene._camera._h /= 1.01;
+
 
         // Application des vitesses aux voitures
         scene.apply_cars_speed();

@@ -16,7 +16,7 @@ class Car {
     float _radius = 1;
 
     // Vitesse (m/s)
-    float _speed = 0.1;
+    float _speed = 0.0;
 
     // Angle de la voiture (radians)
     float _angle = 0; 
