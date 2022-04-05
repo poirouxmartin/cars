@@ -1,7 +1,7 @@
-#include "cars.h"
 #include "time_tests.h"
 #include "math.h"
 #include "gui.h"
+#include "scene.h"
 
 
 /* TODO
@@ -13,7 +13,7 @@
 -> Créer une caméra (classe?) -> une classe scène avec voitures, circuit, caméra ?
 -> Ajout de friction
 -> Définir un delta t
-
+-> Multi-caméras
 
 
 */
@@ -43,14 +43,8 @@ int main() {
     SetTargetFPS(fps);
 
 
-
-    // Génération des voitures
-    Car cars[n_cars];
-
-    for (int i = 0; i < n_cars; i++) {
-        Car car;
-        cars[i] = car;
-    }
+    // Initialisation de la scène
+    Scene scene;
 
 
 
@@ -60,31 +54,30 @@ int main() {
         // Fonction test pour les temps
         if (IsKeyDown(KEY_T))
             test_function(&test, 1);
-        
-
-        // Application de la physique sur les voitures
-        for (Car & c : cars) {
-            c.apply_speed();
-        }
 
 
         // ----- Contrôle d'une des voitures -----
 
         // Accélère la voiture
         if (IsKeyDown(KEY_UP))
-            cars[0]._speed += 0.01;
+            scene._cars[0]._speed += scene._cars[0]._acceleration;
 
         // Décélère la voiture
         if (IsKeyDown(KEY_DOWN))
-            cars[0]._speed -= 0.01;
+            scene._cars[0]._speed -= scene._cars[0]._acceleration;
 
         // Tourne vers la gauche
         if (IsKeyDown(KEY_LEFT))
-            cars[0]._angle -= 0.01;
+            scene._cars[0]._angle -= 0.01;
 
         // Tourne vers la droite
         if (IsKeyDown(KEY_RIGHT))
-            cars[0]._angle += 0.01;
+            scene._cars[0]._angle += 0.01;
+
+
+
+        // Application des vitesses aux voitures
+        scene.apply_cars_speed();
 
 
         // Dessins
@@ -94,10 +87,9 @@ int main() {
             ClearBackground(background_color);
 
 
-            // Dessin des voitures
-            for (Car & c : cars) {
-                c.draw();
-            }
+           
+            // Affichage de la scène
+            scene.draw();
 
             
         // Fin de la zone de dessin
