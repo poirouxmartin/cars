@@ -1,7 +1,9 @@
 #include "scene.h"
 #include "gui.h"
 #include "math.h"
-
+#include <iostream>
+#include <string>
+using namespace std;
 
 
 // Constructeur par défaut
@@ -17,18 +19,56 @@ Scene::Scene() {
     Cam cam;
     _camera = cam;
 
+    // Initialisation du temps
+    _t = clock();
 
+    // Initialisation des variables
+    _optimal_delta_t = 1 / (float)fps;
+    _delta_t = 1 / (float)fps;
 
 }
 
 
-// Application de la vitesse de la voiture à sa position
+// Application de la vitesse des voitures à leur position
 void Scene::apply_cars_speed() {
     for (Car & c : _cars) {
-        c.apply_speed();
+        c.apply_speed(_delta_t * time_speed);
     }
 }
 
+
+// Application de la friction linéaire aux voitures
+void Scene::apply_cars_linear_friction() {
+    for (Car & c : _cars) {
+        c.apply_linear_friction(_delta_t * time_speed);
+    }
+}
+
+
+
+
+// Application de l'ensemble des déplacements physiques dans la scene
+void Scene::update() {
+    while (clock() - _t > _optimal_delta_t * 0) {
+
+        _delta_t = (clock() - _t) / 1000.0;
+
+
+        // Applique la vitesse aux voitures
+        apply_cars_speed();
+
+        // Applique la friction linéaire aux voitures
+        apply_cars_linear_friction();
+
+        // Position de la caméra
+        if (_camera._following >= 0) {
+            _camera._x = _cars[_camera._following]._x;
+            _camera._y = _cars[_camera._following]._y;
+        }
+
+        _t = clock();
+    }
+}
 
 
 // Dessin de la scène
@@ -47,15 +87,16 @@ void Scene::draw() {
     // Calcul du nombre de lignes et colonnes
     int _grid_col = L / grid_size + 2;
     int _grid_lin = L * screen_height / screen_width / grid_size + 2;
+    
 
     // Dessine chaque colonne
-    for (int i = 0; i < _grid_col; i++) {
-        DrawLine(i * grid_size * k - fmod(_camera._x, grid_size) * k, 0, i * grid_size * k - fmod(_camera._x, grid_size) * k, screen_height, grid_color);
+    for (int i = -_grid_col / 2; i < _grid_col / 2; i++) {
+        DrawLine(screen_width / 2 + i * grid_size * k - fmod(_camera._x, grid_size) * k, 0, screen_width / 2 + i * grid_size * k - fmod(_camera._x, grid_size) * k, screen_height, grid_color);
     }
 
     // Dessine chaque ligne
-    for (int i = 0; i < _grid_lin; i++) {
-        DrawLine(0, i * grid_size * k - fmod(_camera._y, grid_size) * k, screen_width, i * grid_size * k - fmod(_camera._y, grid_size) * k, grid_color);
+    for (int i = -_grid_lin / 2; i < _grid_lin / 2; i++) {
+        DrawLine(0, screen_height / 2 + i * grid_size * k - fmod(_camera._y, grid_size) * k, screen_width, screen_height / 2 + i * grid_size * k - fmod(_camera._y, grid_size) * k, grid_color);
     }
 
 
@@ -69,9 +110,23 @@ void Scene::draw() {
         // Dessine la voiture
         DrawCircle(x_display, y_display, c._radius * k, car_color);
 
-        // Dessine un cercle pour indiquer sa direction
-        DrawCircle(x_display + c._radius * k * cos(c._angle), y_display + c._radius * k * sin(c._angle), c._radius * k / 4, dot_color);
+        // Dessine une ligne indiquand sa direction
+        DrawLine(x_display, y_display, x_display + k * cos(c._angle) * c._radius * 2, y_display + k * sin(c._angle) * c._radius * 2, direction_color);
     }
 
+
+
+    // Dessin de texte
+
+    // Vitesse du véhicule
+    DrawText(("speed : " + to_string(_cars[0]._speed) + "m/s\n          " + to_string(_cars[0]._speed * 3.6) + "km/h").c_str(), 16, 16, 32, RED);
+
+    // Nombre de FPS
+    DrawText(("FPS : " + to_string(1 / _delta_t)).c_str(), screen_width - 256, 16, 32, RED);
+
+    // (Vitesse du temps)
+
+    // Temps
+    DrawText(("time : " + to_string(clock() * time_speed / 1000) + "s").c_str(), 16, 128, 32, RED);
 
 }

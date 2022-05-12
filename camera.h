@@ -16,6 +16,8 @@ class Cam {
         float _view_angle = 100;
 
 
+        // Voiture que la caméra suit
+        int _following = -1;
 
 
         // Constructeurs

@@ -1,5 +1,6 @@
 #include "cars.h"
 #include "camera.h"
+#include "time.h"
 
 
 class Scene {
@@ -17,6 +18,17 @@ class Scene {
     // Caméra associée
     Cam _camera;
 
+
+    // delta T (s)
+    float _optimal_delta_t;
+    float _delta_t;
+
+    // nombre de steps actuel
+    int _steps = 0;
+
+    // temps calculé à l'itération précédente
+    double _t;
+
     
     // Constructeurs
 
@@ -27,8 +39,14 @@ class Scene {
     // Fonctions
 
 
-    // Application de la vitesse de la voiture à sa position
+    // Application de la vitesse des voitures à leur position
     void apply_cars_speed();
+
+    // Application de la friction linéaire aux voitures
+    void apply_cars_linear_friction();
+
+    // Application de l'ensemble des déplacements physiques dans la scene
+    void update();
 
     // Dessin de la scène
     void draw();
