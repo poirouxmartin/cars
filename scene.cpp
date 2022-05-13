@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <cmath>
 using namespace std;
 
 
@@ -22,13 +23,38 @@ Scene::Scene() {
     _camera = cam;
 
     // Initialisation des bords du circuit
-    for (int i = 0; i < _n_edges; i++) {
+    for (int i = 0; i < _n_edges / 2; i++) {
         Edge edge;
-        edge._x1 = 100 * cos(i * 2 * PI / _n_edges);
-        edge._y1 = 100 * sin(i * 2 * PI / _n_edges);
-        edge._x2 = 100 * cos((i + 1) * 2 * PI / _n_edges);
-        edge._y2 = 100 * sin((i + 1) * 2 * PI / _n_edges);
+        edge._x1 = 100 * cos(i * 2 * PI / _n_edges * 2);
+        edge._y1 = 100 * sin(i * 2 * PI / _n_edges * 2);
+        edge._x2 = 100 * cos((i + 1) * 2 * PI / _n_edges * 2);
+        edge._y2 = 100 * sin((i + 1) * 2 * PI / _n_edges * 2);
         _edges[i] = edge;
+    }
+
+    for (int i = _n_edges / 2; i < _n_edges; i++) {
+        Edge edge;
+        edge._x1 = 75 * cos(i * 2 * PI / _n_edges * 2);
+        edge._y1 = 75 * sin(i * 2 * PI / _n_edges * 2);
+        edge._x2 = 75 * cos((i + 1) * 2 * PI / _n_edges * 2);
+        edge._y2 = 75 * sin((i + 1) * 2 * PI / _n_edges * 2);
+        _edges[i] = edge;
+    }
+
+    // Placement de la ligne d'arrivée
+    _finish_line._x1 = 75;
+    _finish_line._y1 = 0;
+    _finish_line._x2 = 100;
+    _finish_line._y2 = 0;
+
+    // Initialisation des checkpoints
+    for (int i = 0; i < _n_checkpoints; i++) {
+        Checkpoint c;
+        c._x1 = -100;
+        c._y1 = 0;
+        c._x2 = -75;
+        c._y2 = 0;
+        _checkpoints[i] = c;
     }
 
     // Initialisation du temps
@@ -110,7 +136,6 @@ void Scene::update() {
                 break;
             }
         }
-        DrawText(("Collision : " + to_string(b)).c_str(), screen_width - 256, 128, 32, RED);
     }
 }
 
@@ -145,12 +170,30 @@ void Scene::draw() {
 
 
     // Dessin du circuit
+
+    // Dessin des bords du circuit
     for (Edge & e : _edges) {
         float x1_display = (e._x1 - _camera._x) * k + screen_width / 2;
         float y1_display = (e._y1 - _camera._y) * k + screen_height / 2;
         float x2_display = (e._x2 - _camera._x) * k + screen_width / 2;
         float y2_display = (e._y2 - _camera._y) * k + screen_height / 2;
         DrawLine(x1_display, y1_display, x2_display, y2_display, edge_color);
+    }
+
+    // Dessin de la ligne d'arrivée
+    float x1_display = (_finish_line._x1 - _camera._x) * k + screen_width / 2;
+    float y1_display = (_finish_line._y1 - _camera._y) * k + screen_height / 2;
+    float x2_display = (_finish_line._x2 - _camera._x) * k + screen_width / 2;
+    float y2_display = (_finish_line._y2 - _camera._y) * k + screen_height / 2;
+    DrawLine(x1_display, y1_display, x2_display, y2_display, finish_line_color);
+
+    // Dessin des checkpointd
+    for (Checkpoint & c : _checkpoints) {
+        float x1_display = (c._x1 - _camera._x) * k + screen_width / 2;
+        float y1_display = (c._y1 - _camera._y) * k + screen_height / 2;
+        float x2_display = (c._x2 - _camera._x) * k + screen_width / 2;
+        float y2_display = (c._y2 - _camera._y) * k + screen_height / 2;
+        DrawLine(x1_display, y1_display, x2_display, y2_display, checkpoint_color);
     }
 
 
@@ -173,15 +216,15 @@ void Scene::draw() {
     // Dessin de texte
 
     // Vitesse du véhicule
-    DrawText(("speed : " + to_string(_cars[0]._speed) + "m/s\n          " + to_string(_cars[0]._speed * 3.6) + "km/h").c_str(), 16, 16, 32, RED);
+    DrawText(("speed : " + to_string(lround(_cars[0]._speed)) + "m/s - " + to_string(lround(_cars[0]._speed * 3.6)) + "km/h").c_str(), 16, 16, 32, RED);
 
     // Nombre de FPS
-    DrawText(("FPS : " + to_string(1 / _delta_t)).c_str(), screen_width - 256, 16, 32, RED);
+    DrawText(("FPS : " + to_string(lround(1 / _delta_t))).c_str(), screen_width - 160, 16, 32, RED);
 
     // (Vitesse du temps)
 
     // Temps
     DrawText(("time scale : " + to_string(_time_scale)).c_str(), 16, 128, 32, RED);
-    DrawText(("time : " + to_string(clock() * _time_scale / 1000) + "s").c_str(), 16, 160, 32, RED);
+    DrawText(("time : " + to_string(lround(clock() * _time_scale) * 0.001) + "s").c_str(), 16, 160, 32, RED);
 
 }

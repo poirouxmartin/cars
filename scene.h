@@ -1,5 +1,5 @@
 #include "cars.h"
-#include "edge.h"
+#include "track.h"
 #include "camera.h"
 #include "time.h"
 
@@ -20,11 +20,19 @@ class Scene {
     Cam _camera;
 
     // Nombre de bords pour le circuit
-    static const int _n_edges = 3;
+    static const int _n_edges = 100;
 
     // Liste des bords du circuit
     Edge _edges[_n_edges];
 
+    // Ligne d'arrivée
+    Finish _finish_line;
+
+    // Nombre de checkpoints pour le circuit
+    static const int _n_checkpoints = 1;
+
+    // Liste des bords du circuit
+    Checkpoint _checkpoints[_n_checkpoints];
 
     // delta T (s)
     float _optimal_delta_t;

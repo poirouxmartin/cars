@@ -28,7 +28,13 @@ static Color direction_color = {255, 0, 0, 255};
 static Color grid_color = {255, 255, 255, 100};
 
 // Couleur des bords du circuit
-static Color edge_color = {255, 150, 150, 255};
+static Color edge_color = {255, 255, 255, 255};
+
+// Couleur de la ligne de départ/d'arrivé
+static Color finish_line_color = {255, 0, 0, 255};
+
+// Couleur des checkpoints
+static Color checkpoint_color = {255, 150, 150, 255};
 
 // Taille d'un carreau du quadrillage (m)
 static float grid_size = 5;

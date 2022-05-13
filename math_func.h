@@ -21,3 +21,6 @@ float min(float, float);
 
 // Function which returns a vector multiplied by a scalar
 Vector2 scale_vector(Vector2, float);
+
+// Function which returns the round value of a number
+double round_number(double d);

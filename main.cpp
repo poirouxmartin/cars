@@ -16,6 +16,9 @@
 -> Implémentation des dérapages
 -> Collision des voitures avec les bords
 -> Utiliser un diviser pour régner pour les collisions entre les voitures et les bords pour optimiser
+-> Fabrication de checkpoints et ligne de départ/d'arrivée
+-> Implémentation de vrais circuits
+-> Surcharge de la fonction is_collision pour d'autres types d'objets -> changement de la fonction into distance entre point et segment
 
 -> Faire un système exact? ne dépendant plus de delta t -> calcul de la position par intégrations
 

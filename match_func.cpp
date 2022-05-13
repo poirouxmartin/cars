@@ -1,4 +1,5 @@
 #include "math_func.h"
+#include "math.h"
 
 
 // Function which returns the squared length of the difference of two vectors
@@ -40,4 +41,11 @@ float min(float a, float b) {
 // Function which returns a vector multiplied by a scalar
 Vector2 scale_vector(Vector2 v, float s) {
     return {v.x * s, v.y * s};
+}
+
+
+// Function which returns the round value of a number
+double round_number(double d)
+{
+  return floor(d + 0.5);
 }
