@@ -14,7 +14,8 @@
 -> Accélération angulaire ou vitesse angulaire?
 -> Système réaliste d'accélération et de freinage
 -> Implémentation des dérapages
--> Focus camera sur une voiture
+-> Collision des voitures avec les bords
+-> Utiliser un diviser pour régner pour les collisions entre les voitures et les bords pour optimiser
 
 -> Faire un système exact? ne dépendant plus de delta t -> calcul de la position par intégrations
 
@@ -63,19 +64,19 @@ int main() {
 
         // Accélère la voiture
         if (IsKeyDown(KEY_UP))
-            scene._cars[0].apply_acceleration(scene._delta_t * time_speed);
+            scene._cars[0].apply_acceleration(scene._delta_t * scene._time_scale);
 
         // Décélère la voiture (à changer, car là ça accélère)
         if (IsKeyDown(KEY_DOWN))
-            scene._cars[0].apply_break(scene._delta_t * time_speed);
+            scene._cars[0].apply_break(scene._delta_t * scene._time_scale);
 
         // Tourne vers la gauche
         if (IsKeyDown(KEY_LEFT))
-            scene._cars[0].steer(-1.0, scene._delta_t * time_speed);
+            scene._cars[0].steer(-1.0, scene._delta_t * scene._time_scale);
 
         // Tourne vers la droite
         if (IsKeyDown(KEY_RIGHT))
-            scene._cars[0].steer(1.0, scene._delta_t * time_speed);
+            scene._cars[0].steer(1.0, scene._delta_t * scene._time_scale);
 
 
         // Déplacement de la caméra
@@ -100,6 +101,13 @@ int main() {
 
         // Scroller pour changer de voiture suivie
         
+
+        // Changement de la vitesse du temps
+        if (IsKeyPressed(KEY_KP_ADD))
+            scene._time_scale *= 2;
+
+        if (IsKeyPressed(KEY_KP_SUBTRACT))
+            scene._time_scale /= 2;
 
 
         // Application des vitesses aux voitures

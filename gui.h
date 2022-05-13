@@ -12,9 +12,6 @@ static float screen_height = 900;
 // Nombre de FPS
 static int fps = 144;
 
-// Vitesse du temps
-static float time_speed = 1.0;
-
 // Couleur de fond
 static Color background_color = {25, 25, 25};
 
@@ -29,6 +26,9 @@ static Color direction_color = {255, 0, 0, 255};
 
 // Couleur du quadrillage
 static Color grid_color = {255, 255, 255, 100};
+
+// Couleur des bords du circuit
+static Color edge_color = {255, 150, 150, 255};
 
 // Taille d'un carreau du quadrillage (m)
 static float grid_size = 5;

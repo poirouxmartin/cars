@@ -36,7 +36,7 @@ void Car::steer(float direction, float delta_t) {
     float angular_speed = direction * _steer * _speed / _steer_max_speed * exp(- _exp_steer * abs(_speed)) * exp(_exp_steer * _steer_max_speed) * delta_t * PI;
     _angle += angular_speed;
     // Ralentit un peu la voiture aussi
-    apply_break(delta_t * direction * 0.1);
+    apply_break(delta_t * abs(direction) * 0.1);
 }
 
 

@@ -1,4 +1,5 @@
 #include "cars.h"
+#include "edge.h"
 #include "camera.h"
 #include "time.h"
 
@@ -18,6 +19,12 @@ class Scene {
     // Caméra associée
     Cam _camera;
 
+    // Nombre de bords pour le circuit
+    static const int _n_edges = 3;
+
+    // Liste des bords du circuit
+    Edge _edges[_n_edges];
+
 
     // delta T (s)
     float _optimal_delta_t;
@@ -28,6 +35,9 @@ class Scene {
 
     // temps calculé à l'itération précédente
     double _t;
+
+    // Vitesse du temps
+    float _time_scale = 1.0;
 
     
     // Constructeurs
@@ -44,6 +54,9 @@ class Scene {
 
     // Application de la friction linéaire aux voitures
     void apply_cars_linear_friction();
+
+    // Detecte s'il y a une collision entre une voiture et un bord du circuit
+    bool is_collision(Car, Edge);
 
     // Application de l'ensemble des déplacements physiques dans la scene
     void update();

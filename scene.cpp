@@ -1,8 +1,10 @@
 #include "scene.h"
 #include "gui.h"
 #include "math.h"
+#include "math_func.h"
 #include <iostream>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 
@@ -19,6 +21,16 @@ Scene::Scene() {
     Cam cam;
     _camera = cam;
 
+    // Initialisation des bords du circuit
+    for (int i = 0; i < _n_edges; i++) {
+        Edge edge;
+        edge._x1 = 100 * cos(i * 2 * PI / _n_edges);
+        edge._y1 = 100 * sin(i * 2 * PI / _n_edges);
+        edge._x2 = 100 * cos((i + 1) * 2 * PI / _n_edges);
+        edge._y2 = 100 * sin((i + 1) * 2 * PI / _n_edges);
+        _edges[i] = edge;
+    }
+
     // Initialisation du temps
     _t = clock();
 
@@ -32,7 +44,7 @@ Scene::Scene() {
 // Application de la vitesse des voitures à leur position
 void Scene::apply_cars_speed() {
     for (Car & c : _cars) {
-        c.apply_speed(_delta_t * time_speed);
+        c.apply_speed(_delta_t * _time_scale);
     }
 }
 
@@ -40,8 +52,31 @@ void Scene::apply_cars_speed() {
 // Application de la friction linéaire aux voitures
 void Scene::apply_cars_linear_friction() {
     for (Car & c : _cars) {
-        c.apply_linear_friction(_delta_t * time_speed);
+        c.apply_linear_friction(_delta_t * _time_scale);
     }
+}
+
+
+
+// Detecte s'il y a une collision entre une voiture et un bord du circuit
+bool Scene::is_collision(Car c, Edge e) {
+
+    Vector2 v = {e._x1, e._y1};
+    Vector2 w = {e._x2, e._y2};
+    Vector2 p = {c._x, c._y};
+
+    const float l2 = length_squared(v, w);
+
+    if (l2 == 0)
+        return sqrt(length_squared(p, v));
+
+    const float t = max(0.0, min(1.0, dot(substraction(p, v), substraction(w, v)) / l2));
+
+    const Vector2 proj = addition(v, scale_vector(substraction(w, v), t));
+
+    float d = sqrt(length_squared(p, proj));
+
+    return (d <= c._radius);
 }
 
 
@@ -67,6 +102,15 @@ void Scene::update() {
         }
 
         _t = clock();
+
+        bool b = false;
+        for (int i = 0; i < _n_edges; i++) {
+            if (is_collision(_cars[0], _edges[i])) {
+                b = true;
+                break;
+            }
+        }
+        DrawText(("Collision : " + to_string(b)).c_str(), screen_width - 256, 128, 32, RED);
     }
 }
 
@@ -100,6 +144,16 @@ void Scene::draw() {
     }
 
 
+    // Dessin du circuit
+    for (Edge & e : _edges) {
+        float x1_display = (e._x1 - _camera._x) * k + screen_width / 2;
+        float y1_display = (e._y1 - _camera._y) * k + screen_height / 2;
+        float x2_display = (e._x2 - _camera._x) * k + screen_width / 2;
+        float y2_display = (e._y2 - _camera._y) * k + screen_height / 2;
+        DrawLine(x1_display, y1_display, x2_display, y2_display, edge_color);
+    }
+
+
     // Dessin des voitures
     for (Car & c : _cars) {
         // Calcul des coordonnées d'affichage
@@ -127,6 +181,7 @@ void Scene::draw() {
     // (Vitesse du temps)
 
     // Temps
-    DrawText(("time : " + to_string(clock() * time_speed / 1000) + "s").c_str(), 16, 128, 32, RED);
+    DrawText(("time scale : " + to_string(_time_scale)).c_str(), 16, 128, 32, RED);
+    DrawText(("time : " + to_string(clock() * _time_scale / 1000) + "s").c_str(), 16, 160, 32, RED);
 
 }
